@@ -38,22 +38,18 @@ class PrefixExecutor:
         if not bash_path:
             raise Exception("Failed to find bash")
         p = Popen(
-            [bash_path, f"-c '. {exec_target}' {self.path}"],
-            stdout=STDOUT,
-            stderr=STDOUT,
+            [bash_path, f"-c", f". {exec_target}", str(self.path)],
             shell=False,
             encoding="utf-8",
             env={
                 "PYRUN_EXEC_DIR": str(exec_dir),
                 "PYRUN_PROLOG": str(self.prolog if self.prolog else ""),
-                "PYRUN_PREFIX": self.prefix,
-                "PYRUN_TARGET": str(self.path),
+                "PYRUN_PREFIX": colored(f"[{self.prefix}] ", "cyan"),
+                "PYRUN_TARGET": str(self.path.absolute()),
             },
             cwd=self.cwd,
         )
-        stdout = p.stdout
-        if not stdout:
-            raise Exception(f"Failed to open {self.path}")
+
         p.wait()
         if p.returncode > 0:
             redline = colored(

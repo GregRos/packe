@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 export c_reset_=$'\e[0m'
 c_out_char() (
     set +x

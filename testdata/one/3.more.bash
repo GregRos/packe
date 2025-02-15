@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 echo.section "one/1.more.bash"
 
 echo "I'm running from: $0"

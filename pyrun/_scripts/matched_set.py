@@ -1,3 +1,4 @@
+from time import sleep
 from termcolor import colored
 from pyrun._scripts.runnable import Runnable
 
@@ -16,6 +17,7 @@ class MatchedSet(Runnable):
     def run(self):
         for kid in self.kids:
             kid.run()
+        sleep(0.1)
         print(
             colored(f"      ↑ DONE ↑      ", color="white", on_color="on_light_green"),
             "\n",

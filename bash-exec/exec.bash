@@ -1,15 +1,14 @@
-env
 source "$PYRUN_EXEC_DIR/utils.bash/source-me.bash"
 if [ -n "$PYRUN_PROLOG" ]; then
     source "$PYRUN_PROLOG"
 fi
 exec > >(
     trap "" INT TERM
-    sed "s/^/$PYRUN_PREFIX: /"
+    sed "s/^/$(sed -e 's/[&\\/]/\\&/g; s/$/\\/' -e '$s/\\$//' <<<"$PYRUN_PREFIX")/"
 )
 exec 2> >(
     trap "" INT TERM
-    sed "s/^/$PYRUN_PREFIX: /" >&2
+    sed "s/^/$(sed -e 's/[&\\/]/\\&/g; s/$/\\/' -e '$s/\\$//' <<<"$PYRUN_PREFIX")/" >&2
 )
 
 if [ -z "$PYRUN_TARGET" ]; then

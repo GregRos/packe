@@ -6,6 +6,9 @@
       "request": "launch",
       "type": "debugpy",
       "module": "pyrun",
+      "env": {
+        "TEST_ROOT": "./testdata"
+      },
       "args": ["-c ./testdata/config.yaml", "run", "%"]
     }
   ]
