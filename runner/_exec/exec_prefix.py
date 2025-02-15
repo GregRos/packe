@@ -40,9 +40,9 @@ class PrefixExecutor:
 
     def exec(self):
         self.must_be_linux_root()
-
+        exec_target = str(package_root / "runner_stub.bash")
         p = Popen(
-            ["/bin/bash", str(package_root / "runner_stub.bash")],
+            ["/bin/bash", f"-c '. {exec_target}' {self.path}"],
             stdout=STDOUT,
             stderr=STDOUT,
             shell=False,

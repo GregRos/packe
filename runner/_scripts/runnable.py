@@ -8,8 +8,12 @@ from runner._scripts.types import RunnableFormat
 @dataclass
 class Runnable(ABC):
     pos: int | None
-    name: str
+    name: str | None
     parent: "Runnable | None"
+
+    @property
+    def is_visible(self):
+        return self.name is not None
 
     @property
     def address(self):
@@ -34,6 +38,9 @@ class Runnable(ABC):
             parts.append(str(self.pos).zfill(2))
         parts.append(self.name)
         return ":".join(parts)
+
+    @abstractmethod
+    def __len__(self) -> int: ...
 
     @abstractmethod
     def run(self): ...

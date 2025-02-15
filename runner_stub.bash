@@ -12,4 +12,8 @@ exec 2> >(
     sed "s/^/$PYRUN_PREFIX: /" >&2
 )
 
+if [ -z "$PYRUN_TARGET" ]; then
+    echo.error "PYRUN_TARGET is not set"
+    exit 1
+fi
 source "$PYRUN_TARGET"

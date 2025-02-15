@@ -43,7 +43,7 @@ def pos_selector(pos: int) -> Callable[[Runnable], bool]:
 def name_selector(name: str) -> Callable[[Runnable], bool]:
 
     def rule(script: Runnable):
-        return script.name.lower() == name.lower()
+        return script.name and script.name.lower() == name.lower() or False
 
     return rule
 

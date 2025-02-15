@@ -3,6 +3,7 @@ from os import name
 from pathlib import Path
 from typing import Callable, Iterable
 from runner._matching.script_selectors import parse_selector_list
+from runner._scripts.matched_set import MatchedSet
 from runner._scripts.pretty_print import pretty_print_kids
 from runner._scripts.script import Script
 from runner._scripts.indexed import must_parse_indexed, try_parse_indexed
@@ -12,6 +13,7 @@ from runner._scripts.types import RunnableFormat
 
 @dataclass
 class Pack(Runnable):
+    name: str
     _kids: list[Runnable] = field(init=False, default_factory=list)
 
     @property
@@ -62,8 +64,11 @@ class Pack(Runnable):
         p.add(*indexed_kids)
         return p
 
+    def __bool__(self):
+        return bool(self.kids)
+
     def find_all(self, multipart_selectors: list[str]):
-        all_results = []
+        all_results: list[Runnable] = []
         for multipart_selector in multipart_selectors:
             selector_list = [
                 parse_selector_list(s) for s in multipart_selector.split("/")
@@ -81,6 +86,7 @@ class Pack(Runnable):
                             next_results.append(kid)
                 results = next_results
             all_results.extend(results)
+        return MatchedSet(multipart_selectors, all_results)
 
     def __len__(self):
         return len(self.kids)
@@ -96,7 +102,10 @@ class Pack(Runnable):
                 return pretty_print_kids(self.address, self.kids)
             case "line":
                 return ": ".join(
-                    [self.name, ", ".join(f"{x:child}" for x in self.kids)]
+                    [
+                        self.name,
+                        ", ".join(f"{x:child}" for x in self.kids if x.is_visible),
+                    ]
                 )
             case "child":
                 return f"{self.name}[{len(self)}]/"

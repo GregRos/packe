@@ -3,16 +3,16 @@ from pathlib import Path
 from termcolor import colored
 
 from runner._cli import _Cli
-from runner._from_config import pack_from_config
+from runner._config_file import ConfigFile
 
 
 def start():
     cli = _Cli()
 
     command = cli.parse()
-
-    pack = pack_from_config(Path(command.config))
-    matched = list(pack.find_all(command.selector))
+    config_file = ConfigFile(Path(command.config))
+    pack = config_file.to_root_pack()
+    matched = pack.find_all(command.selector)
     cmd = command.command
     if hasattr(command, "dry") and command.dry:
         cmd = "list"
@@ -20,21 +20,13 @@ def start():
         splat = " ".join(command.selector)
         print(f"No scripts found for {splat}")
         exit(1)
+
     match cmd:
         case "run":
-            for script in matched:
-                script.run()
-            print(
-                colored(
-                    f"      ↑ DONE ↑      ", color="white", on_color="on_light_green"
-                ),
-                "\n",
-            )
+            matched.run()
         case "list":
-            for script in matched:
-                print(f"{script:address}")
+            print(f"{matched:summary}")
         case "print":
-            for script in matched:
-                print(f"{script:full}")
+            print(f"{matched:full}")
         case _:
             raise Exception(f"Unknown command {command.command}")

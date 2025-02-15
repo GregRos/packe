@@ -13,6 +13,7 @@ from runner._scripts.runnable import Runnable
 @dataclass
 class Script(Runnable):
     path: Path
+    name: str
 
     @staticmethod
     def is_valid_indexed(path: Path):
