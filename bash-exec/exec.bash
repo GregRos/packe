@@ -1,5 +1,4 @@
-my_dir="$(dirname "$0")"
-source "$my_dir/utils.bash/source-me.bash"
+source "$PYRUN_EXEC_DIR/utils.bash/source-me.bash"
 if [ -n "$PYRUN_PROLOG" ]; then
     source "$PYRUN_PROLOG"
 fi

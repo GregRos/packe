@@ -2,8 +2,8 @@ from pathlib import Path
 
 from termcolor import colored
 
-from runner._cli import _Cli
-from runner._config_file import ConfigFile
+from pyrun._cli import _Cli
+from pyrun._config_file import ConfigFile
 
 
 def start():

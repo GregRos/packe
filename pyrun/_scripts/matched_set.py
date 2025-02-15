@@ -1,5 +1,5 @@
 from termcolor import colored
-from runner._scripts.runnable import Runnable
+from pyrun._scripts.runnable import Runnable
 
 
 class MatchedSet(Runnable):

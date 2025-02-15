@@ -4,7 +4,7 @@ from subprocess import STDOUT, Popen
 from typing import Protocol
 
 from termcolor import colored
-from runner._root import package_root
+from pyrun._root import package_root
 
 
 class ExecInfo(Protocol):
@@ -40,7 +40,8 @@ class PrefixExecutor:
 
     def exec(self):
         self.must_be_linux_root()
-        exec_target = str(package_root / "runner_stub.bash")
+        exec_dir = package_root / "bash-exec"
+        exec_target = str(exec_dir / "exec.bash")
         p = Popen(
             ["/bin/bash", f"-c '. {exec_target}' {self.path}"],
             stdout=STDOUT,
@@ -48,6 +49,7 @@ class PrefixExecutor:
             shell=False,
             encoding="utf-8",
             env={
+                "PYRUN_EXEC_DIR": str(exec_dir),
                 "PYRUN_PROLOG": self.prolog if self.prolog else "",
                 "PYRUN_PREFIX": self.prefix,
                 "PYRUN_TARGET": str(self.path),

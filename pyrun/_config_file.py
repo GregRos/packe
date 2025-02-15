@@ -15,7 +15,7 @@ class ConfigFile:
         self.data = safe_load(path.read_text())
 
     def to_root_pack(self):
-        from runner._scripts import Pack
+        from pyrun._scripts import Pack
 
         root = Pack.root()
         for name, obj in self.data.items():

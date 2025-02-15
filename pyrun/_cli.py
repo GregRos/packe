@@ -2,8 +2,8 @@ import argparse
 from typing import Iterable, Sequence, Union
 
 
-from runner._command import Command
-from runner._matching.script_selectors import parse_selector_list
+from pyrun._command import Command
+from pyrun._matching.script_selectors import parse_selector_list
 
 
 def _add_selector(p: argparse.ArgumentParser):
