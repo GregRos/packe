@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import TypedDict
 from yaml import safe_load
@@ -20,5 +21,6 @@ class ConfigFile:
         root = Pack.root()
         for name, obj in self.data.items():
             path = Path(obj["path"])
-            root.add(Pack.from_indexed_dir(root, path, name))
+            expanded = os.path.expandvars(path)
+            root.add(Pack.from_indexed_dir(root, Path(expanded), name))
         return root
