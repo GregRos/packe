@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from shutil import which
 from subprocess import STDOUT, Popen
 from typing import Protocol
 
@@ -30,27 +31,21 @@ class PrefixExecutor:
         self.cwd = cwd
         self.prolog = prolog
 
-    def must_be_linux_root(self):
-        if os.name != "posix":
-            print("Not a linux system")
-            exit(2)
-        if os.getuid() != 0:
-            print("You must be root to run this script")
-            exit(3)
-
     def exec(self):
-        self.must_be_linux_root()
         exec_dir = package_root / "bash-exec"
         exec_target = str(exec_dir / "exec.bash")
+        bash_path = which("bash")
+        if not bash_path:
+            raise Exception("Failed to find bash")
         p = Popen(
-            ["/bin/bash", f"-c '. {exec_target}' {self.path}"],
+            [bash_path, f"-c '. {exec_target}' {self.path}"],
             stdout=STDOUT,
             stderr=STDOUT,
             shell=False,
             encoding="utf-8",
             env={
                 "PYRUN_EXEC_DIR": str(exec_dir),
-                "PYRUN_PROLOG": self.prolog if self.prolog else "",
+                "PYRUN_PROLOG": str(self.prolog if self.prolog else ""),
                 "PYRUN_PREFIX": self.prefix,
                 "PYRUN_TARGET": str(self.path),
             },

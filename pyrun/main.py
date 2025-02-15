@@ -10,7 +10,7 @@ def start():
     cli = _Cli()
 
     command = cli.parse()
-    config_file = ConfigFile(Path(command.config))
+    config_file = ConfigFile(Path(command.config.strip()))
     pack = config_file.to_root_pack()
     matched = pack.find_all(command.selector)
     cmd = command.command

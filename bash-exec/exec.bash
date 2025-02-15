@@ -1,3 +1,4 @@
+env
 source "$PYRUN_EXEC_DIR/utils.bash/source-me.bash"
 if [ -n "$PYRUN_PROLOG" ]; then
     source "$PYRUN_PROLOG"
