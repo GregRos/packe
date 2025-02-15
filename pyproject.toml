@@ -10,6 +10,7 @@ python = "3.11.*"
 pygments = "^2.19.1"
 termcolor = "^2.5.0"
 typeguard = "2.13.*"
+pyyaml = "^6.0.2"
 
 [tool.poetry.scripts]
 perdido = "runner.main:start"

@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "mads-hartmann.bash-ide-vscode",
+    "ms-python.black-formatter",
+    "kevinrose.vsc-python-indent",
+    "mgesbert.python-path",
+    "eshnek.smart-backspace"
+  ]
+}

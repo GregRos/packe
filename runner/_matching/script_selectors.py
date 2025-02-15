@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Iterable, Callable, TypeAlias, Union
 
 
 if TYPE_CHECKING:
-    from runner.scripts.runnable import Runnable
+    from runner._scripts.runnable import Runnable
 
     Selector: TypeAlias = Callable[[Runnable], bool]
 

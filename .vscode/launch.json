@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch src/runner.py??",
+      "request": "launch",
+      "type": "debugpy",
+      "program": "src/runner.py",
+      "args": ["list", "sys/%", "svc/%"]
+    }
+  ]
+}

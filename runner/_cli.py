@@ -1,17 +1,12 @@
 import argparse
-from typing import Iterable, Protocol, Sequence, Union
+from typing import Iterable, Sequence, Union
 
 
-from runner.matching.script_selectors import parse_selector_list
+from runner._command import Command
+from runner._matching.script_selectors import parse_selector_list
 
 
-class Command(Protocol):
-    command: str
-    selector: list[str]
-    dry: bool
-
-
-def add_selector(p: argparse.ArgumentParser):
+def _add_selector(p: argparse.ArgumentParser):
     p.add_argument(
         "selector",
         nargs="+",
@@ -19,9 +14,12 @@ def add_selector(p: argparse.ArgumentParser):
     )
 
 
-class Cli:
+class _Cli:
     def __init__(self):
         root_parser = argparse.ArgumentParser(description="Perdido setup script runner")
+        root_parser.add_argument(
+            "-c", "--config", help="path to a config file", required=True, type=str
+        )
         subparsers = root_parser.add_subparsers(
             title="command", required=True, dest="command"
         )
@@ -39,11 +37,11 @@ class Cli:
             help="don't actually run the scripts",
             required=False,
         )
-        add_selector(run)
+        _add_selector(run)
         list = subparsers.add_parser("list", help="list installation scripts")
-        add_selector(list)
+        _add_selector(list)
         printing = subparsers.add_parser("print", help="print installation scripts")
-        add_selector(printing)
+        _add_selector(printing)
 
         self._parser = root_parser
 

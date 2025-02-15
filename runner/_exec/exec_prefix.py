@@ -4,7 +4,7 @@ from subprocess import STDOUT, Popen
 from typing import Protocol
 
 from termcolor import colored
-from runner.root import package_root
+from runner._root import package_root
 
 
 class ExecInfo(Protocol):

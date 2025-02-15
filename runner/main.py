@@ -2,16 +2,17 @@ from pathlib import Path
 
 from termcolor import colored
 
-from runner.cli import Cli
-from runner.all_scripts import root
+from runner._cli import _Cli
+from runner._from_config import pack_from_config
 
 
 def start():
-    cli = Cli()
+    cli = _Cli()
 
     command = cli.parse()
 
-    matched = list(root.find_all(command.selector))
+    pack = pack_from_config(Path(command.config))
+    matched = list(pack.find_all(command.selector))
     cmd = command.command
     if hasattr(command, "dry") and command.dry:
         cmd = "list"

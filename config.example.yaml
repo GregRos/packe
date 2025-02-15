@@ -1,0 +1,4 @@
+sys:
+  path: $PD_ROOT/sys.d
+svc:
+  path: $PD_ROOT/svc.d

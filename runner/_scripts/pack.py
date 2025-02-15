@@ -2,12 +2,12 @@ from dataclasses import field, dataclass
 from os import name
 from pathlib import Path
 from typing import Callable, Iterable
-from runner.matching.script_selectors import parse_selector_list
-from runner.scripts.pretty_print import pretty_print_kids
-from runner.scripts.script import Script
-from runner.scripts.indexed import must_parse_indexed, try_parse_indexed
-from runner.scripts.runnable import Runnable
-from runner.scripts.types import RunnableFormat
+from runner._matching.script_selectors import parse_selector_list
+from runner._scripts.pretty_print import pretty_print_kids
+from runner._scripts.script import Script
+from runner._scripts.indexed import must_parse_indexed, try_parse_indexed
+from runner._scripts.runnable import Runnable
+from runner._scripts.types import RunnableFormat
 
 
 @dataclass
@@ -81,7 +81,6 @@ class Pack(Runnable):
                             next_results.append(kid)
                 results = next_results
             all_results.extend(results)
-        return all_results
 
     def __len__(self):
         return len(self.kids)
