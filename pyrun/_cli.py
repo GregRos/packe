@@ -21,7 +21,7 @@ class _Cli:
     def __init__(self):
         root_parser = argparse.ArgumentParser(description="Perdido setup script runner")
         root_parser.add_argument(
-            "-c", "--config", help="path to a config file", required=False, type=str
+            "-C", "--config", help="path to a config file", required=False, type=str
         )
         subparsers = root_parser.add_subparsers(
             title="command", required=True, dest="command"
