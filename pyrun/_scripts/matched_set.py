@@ -1,6 +1,8 @@
 from time import sleep
 from termcolor import colored
+from pyrun._exec.bash_exec_prefix import BashPrefixExecutor
 from pyrun._scripts.runnable import Runnable
+from pyrun._scripts.script import Script
 
 
 class MatchedSet(Runnable):
@@ -14,17 +16,28 @@ class MatchedSet(Runnable):
         self.query = ", ".join(multipart)
         self.kids = kids
 
-    def run(self):
+    def run(self, executor: BashPrefixExecutor):
         for kid in self.kids:
-            kid.run()
+            kid.run(executor)
         sleep(0.1)
         print(
             colored(f"      ↑ DONE ↑      ", color="white", on_color="on_light_green"),
             "\n",
         )
 
-    def __len__(self):
-        return len(self.kids)
+    def __len__(self) -> int:
+        from pyrun._scripts.pack import Pack
+
+        count = 0
+        for x in self.kids:
+            match x:
+                case Pack():
+                    count += len(x)
+                case Script():
+                    count += 1
+                case _:
+                    raise ValueError(f"Unknown type: {type(x)}")
+        return count
 
     def __iter__(self):
         return iter(self.kids)

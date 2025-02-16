@@ -1,4 +1,6 @@
-one:
-  path: $TEST_ROOT/one
-two:
-  path: $TEST_ROOT/two
+before: ./before.bash
+entrypoints:
+  one:
+    path: ./one
+  two:
+    path: ./two

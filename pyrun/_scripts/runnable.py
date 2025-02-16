@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 
+from pyrun._exec.bash_exec_prefix import BashPrefixExecutor
 from pyrun._scripts.types import RunnableFormat
 
 
@@ -43,7 +44,7 @@ class Runnable(ABC):
     def __len__(self) -> int: ...
 
     @abstractmethod
-    def run(self): ...
+    def run(self, executor: BashPrefixExecutor): ...
 
     @abstractmethod
     def __format__(self, format_spec: RunnableFormat) -> str: ...

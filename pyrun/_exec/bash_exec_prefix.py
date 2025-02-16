@@ -24,36 +24,38 @@ class PrefixExecFailed(Exception, ExecInfo):
         self.path = path
 
 
-class PrefixExecutor:
-    def __init__(self, path: Path, cwd: Path, prefix: str, prolog: Path | None = None):
-        self.path = path
-        self.prefix = prefix
-        self.cwd = cwd
-        self.prolog = prolog
+class BashPrefixExecutor:
+    def __init__(self, before: Path | None = None):
+        self.before = before
 
-    def exec(self):
+    def exec(
+        self,
+        path: Path,
+        cwd: Path,
+        prefix: str,
+    ):
         exec_dir = package_root / "bash-exec"
         exec_target = str(exec_dir / "exec.bash")
         bash_path = which("bash")
         if not bash_path:
             raise Exception("Failed to find bash")
         p = Popen(
-            [bash_path, f"-c", f". {exec_target}", str(self.path)],
+            [bash_path, f"-c", f". {exec_target}", str(path)],
             shell=False,
             encoding="utf-8",
             env={
                 "PYRUN_EXEC_DIR": str(exec_dir),
-                "PYRUN_PROLOG": str(self.prolog if self.prolog else ""),
-                "PYRUN_PREFIX": colored(f"[{self.prefix}] ", "cyan"),
-                "PYRUN_TARGET": str(self.path.absolute()),
+                "PYRUN_BEFORE": str(self.before if self.before else ""),
+                "PYRUN_PREFIX": colored(f"[{prefix}] ", "cyan"),
+                "PYRUN_TARGET": str(path.absolute()),
             },
-            cwd=self.cwd,
+            cwd=cwd,
         )
 
         p.wait()
         if p.returncode > 0:
             redline = colored(
-                f"      ↑ FAILED AT {self.prefix} ↑      ",
+                f"         ↑ FAILED AT {prefix} ↑         ",
                 on_color="on_red",
                 color="black",
             )

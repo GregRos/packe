@@ -1,6 +1,9 @@
 import argparse
+from logging import fatal
+from os import environ
+from sys import stderr
 from typing import Iterable, Sequence, Union
-
+from ._print import fatal_error
 
 from pyrun._command import Command
 from pyrun._matching.script_selectors import parse_selector_list
@@ -18,7 +21,7 @@ class _Cli:
     def __init__(self):
         root_parser = argparse.ArgumentParser(description="Perdido setup script runner")
         root_parser.add_argument(
-            "-c", "--config", help="path to a config file", required=True, type=str
+            "-c", "--config", help="path to a config file", required=False, type=str
         )
         subparsers = root_parser.add_subparsers(
             title="command", required=True, dest="command"
@@ -49,4 +52,9 @@ class _Cli:
         args_result = self._parser.parse_args(args)
         if hasattr(args_result, "rule"):
             args_result.rule = parse_selector_list(args_result.rule)
+        if not hasattr(args_result, "config"):
+            args_result.config = environ.get("PYRUN_CONFIG", None)
+            if not args_result.config:
+                fatal_error("No config file specified and PYRUN_CONFIG not set", 2)
+
         return args_result  # type: ignore

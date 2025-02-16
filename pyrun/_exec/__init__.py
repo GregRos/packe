@@ -1,1 +1,1 @@
-from .exec_prefix import PrefixExecutor
+from .bash_exec_prefix import BashPrefixExecutor

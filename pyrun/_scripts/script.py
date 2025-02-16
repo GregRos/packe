@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from pyrun._exec.exec_prefix import PrefixExecutor
+from pyrun._exec.bash_exec_prefix import BashPrefixExecutor
 from pyrun._scripts.indexed import (
     is_valid_script,
     must_parse_indexed,
@@ -63,8 +63,7 @@ class Script(Runnable):
             return f"{self.pos:02d}:{self.name}"
         return self.name
 
-    def run(self):
+    def run(self, executor: BashPrefixExecutor):
         cwd = self.path.parent
-        executor = PrefixExecutor(self.path, cwd, self.address)
-        executor.exec()
+        executor.exec(self.path, cwd, self.address)
         # code to exec

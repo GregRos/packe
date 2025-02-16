@@ -1,7 +1,9 @@
+from calendar import c
 from dataclasses import field, dataclass
 from os import name
 from pathlib import Path
 from typing import Callable, Iterable
+from pyrun._exec.bash_exec_prefix import BashPrefixExecutor
 from pyrun._matching.script_selectors import parse_selector_list
 from pyrun._scripts.matched_set import MatchedSet
 from pyrun._scripts.pretty_print import pretty_print_kids
@@ -88,8 +90,17 @@ class Pack(Runnable):
             all_results.extend(results)
         return MatchedSet(multipart_selectors, all_results)
 
-    def __len__(self):
-        return len(self.kids)
+    def __len__(self) -> int:
+        count = 0
+        for x in self.kids:
+            match x:
+                case Pack():
+                    count += len(x)
+                case Script():
+                    count += 1
+                case _:
+                    raise ValueError(f"Unknown type: {type(x)}")
+        return count
 
     @property
     def caption(self):
@@ -122,6 +133,6 @@ class Pack(Runnable):
     def __str__(self) -> str:
         return self.__format__("short")
 
-    def run(self):
+    def run(self, exeuctor: BashPrefixExecutor):
         for x in self.kids:
-            x.run()
+            x.run(exeuctor)
