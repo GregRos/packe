@@ -5,11 +5,11 @@ from termcolor import colored
 
 
 def echo_warn(message: str):
-    message = colored(message, "yellow")
-    print(f"⚠️ {message}", file=sys.stdout)
+    message = colored(f"⚠️ {message}", "yellow")
+    print(message, file=sys.stdout)
 
 
 def fatal_error(message: str, code: int = 1) -> NoReturn:
-    message = colored(message, "black", "on_red")
-    print(f"💀 {message}", file=sys.stderr)
+    message = colored(f"💀 {message}", "black", "on_red")
+    print(message, file=sys.stderr)
     exit(code)

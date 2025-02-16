@@ -6,5 +6,6 @@ class ConfigEntry(TypedDict):
 
 
 class ConfigFile(TypedDict):
+    root_only: NotRequired[bool]
     entrypoints: dict[str, ConfigEntry]
     prerun: NotRequired[str]
