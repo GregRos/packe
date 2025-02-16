@@ -4,6 +4,8 @@
     "ms-python.black-formatter",
     "kevinrose.vsc-python-indent",
     "mgesbert.python-path",
-    "eshnek.smart-backspace"
+    "eshnek.smart-backspace",
+    "tamasfe.even-better-toml",
+    
   ]
 }

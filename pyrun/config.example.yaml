@@ -1,0 +1,6 @@
+before: ./before.bash
+entrypoints:
+  one:
+    path: ./one
+  two:
+    path: ./two

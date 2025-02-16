@@ -34,7 +34,7 @@ class BashPrefixExecutor:
         cwd: Path,
         prefix: str,
     ):
-        exec_dir = package_root / "bash-exec"
+        exec_dir = package_root / "pyrun" / "bash-exec"
         exec_target = str(exec_dir / "exec.bash")
         bash_path = which("bash")
         if not bash_path:
