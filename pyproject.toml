@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyrun"
-version = "0.1.0"
+version = "0.2.0"
 description = "Runs bash scripts and stuff"
 authors = ["GregRos <gregros@gregros.dev>"]
 readme = "README.md"
