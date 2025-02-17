@@ -48,6 +48,7 @@ class BashPrefixExecutor:
                 "PYRUN_BEFORE": str(self.before if self.before else ""),
                 "PYRUN_PREFIX": colored(f"[{prefix}] ", "cyan"),
                 "PYRUN_TARGET": str(path.absolute()),
+                **os.environ,
             },
             cwd=cwd,
         )
