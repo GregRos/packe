@@ -1,4 +1,6 @@
+import importlib.metadata
 import os
+import sys
 from pathlib import Path
 from sys import platform
 
@@ -15,8 +17,11 @@ def start():
         fatal_error("Pyrun only supports Linux!", 3)
 
     cli = _Cli()
-
     command = cli.parse()
+    if command.command == "version":
+        v = importlib.metadata.version("pyrun")
+        print(colored(f"pyrun {v} / python {sys.version}", "green"))
+        exit(0)
     cfg = ConfigFileWrapper(Path(command.config.strip()))
     if os.geteuid() != 0 and cfg.root_only:
         fatal_error("Config file requires running as root!", 4)
