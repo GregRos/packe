@@ -4,3 +4,7 @@ entrypoints:
     path: ./one
   two:
     path: ./two
+  prerun-fail:
+    path: ./prerun-fail
+  prerun-succeed:
+    path: ./prerun-pass

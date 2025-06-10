@@ -3,6 +3,8 @@ from dataclasses import field, dataclass
 from os import name
 from pathlib import Path
 from typing import Callable, Iterable
+
+from termcolor import colored
 from pyrun._exec.bash_exec_prefix import BashPrefixExecutor
 from pyrun._matching.script_selectors import parse_selector_list
 from pyrun._scripts.matched_set import MatchedSet
@@ -16,6 +18,8 @@ from pyrun._scripts.types import RunnableFormat
 @dataclass
 class Pack(Runnable):
     name: str
+    pre_run: Script | None = field(default=None)
+
     _kids: list[Runnable] = field(init=False, default_factory=list)
 
     @property
@@ -50,7 +54,12 @@ class Pack(Runnable):
         else:
             name = index_root.name
             pos = None
-        p = Pack(pos, name, parent)
+        prerun_path = [*index_root.glob("pyrun.pre*")]
+        prerun_script: Script | None = None
+        if prerun_path:
+            prerun_path = prerun_path[0]
+            prerun_script = Script.from_named(parent, prerun_path)
+        p = Pack(pos, name, parent, prerun_script)
 
         def make_kid(path: Path):
             if path.is_dir():
@@ -133,6 +142,20 @@ class Pack(Runnable):
     def __str__(self) -> str:
         return self.__format__("short")
 
-    def run(self, exeuctor: BashPrefixExecutor):
+    def run(self, executor: BashPrefixExecutor):
+        if self.pre_run:
+            pr = executor.try_exec(
+                cwd=self.pre_run.path.parent,
+                path=self.pre_run.path,
+                prefix=self.address,
+            )
+            if pr.returncode > 0:
+                greyline = colored(
+                    f"Pre-run script failed; skipping pack {self.address}",
+                    color="light_grey",
+                    attrs=["bold"],
+                )
+                print(greyline, "\n")
+                return
         for x in self.kids:
-            x.run(exeuctor)
+            x.run(executor)

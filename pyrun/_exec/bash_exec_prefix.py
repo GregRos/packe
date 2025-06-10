@@ -28,7 +28,7 @@ class BashPrefixExecutor:
     def __init__(self, before: Path | None = None):
         self.before = before
 
-    def exec(
+    def try_exec(
         self,
         path: Path,
         cwd: Path,
@@ -54,6 +54,15 @@ class BashPrefixExecutor:
         )
 
         p.wait()
+        return p
+
+    def must_exec(
+        self,
+        path: Path,
+        cwd: Path,
+        prefix: str,
+    ):
+        p = self.try_exec(path, cwd, prefix)
         if p.returncode > 0:
             redline = colored(
                 f"         ↑ FAILED AT {prefix} ↑         ",

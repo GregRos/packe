@@ -29,8 +29,9 @@ class Script(Runnable):
         return Script(pos, str, parent, path)
 
     @staticmethod
-    def from_named(parent: Runnable, path: Path):
-        return Script(None, path.stem, parent, path)
+    def from_named(parent: Runnable | None, path: Path, name: str | None = None):
+        name = name or path.stem
+        return Script(None, name, parent, path)
 
     def __repr__(self) -> str:
         return f"{self:line}"
@@ -65,5 +66,5 @@ class Script(Runnable):
 
     def run(self, executor: BashPrefixExecutor):
         cwd = self.path.parent
-        executor.exec(self.path, cwd, self.address)
+        executor.must_exec(self.path, cwd, self.address)
         # code to exec
