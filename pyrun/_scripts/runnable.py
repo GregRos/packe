@@ -6,11 +6,17 @@ from pyrun._exec.bash_exec_prefix import BashPrefixExecutor
 from pyrun._scripts.types import RunnableFormat
 
 
-@dataclass
+@dataclass(eq=False)
 class Runnable(ABC):
     pos: int | None
     name: str | None
     parent: "Runnable | None"
+
+    def __hash__(self) -> int:
+        return super().__hash__()
+
+    def __eq__(self, value: object) -> bool:
+        return super().__eq__(value)
 
     @property
     def is_visible(self):

@@ -10,10 +10,16 @@ from pyrun._scripts.pretty_print import pretty_print_lines
 from pyrun._scripts.runnable import Runnable
 
 
-@dataclass
+@dataclass(eq=False)
 class Script(Runnable):
     path: Path
     name: str
+
+    def __eq__(self, value: object) -> bool:
+        return super().__eq__(value)
+
+    def __hash__(self) -> int:
+        return super().__hash__()
 
     @staticmethod
     def is_valid_indexed(path: Path):
@@ -43,7 +49,8 @@ class Script(Runnable):
     def __len__(self):
         return len(self.contents)
 
-    def __format__(self, format_spec: str) -> str:
+    def __format__(self, format_spec: str = "short") -> str:
+        format_spec = format_spec or "short"
         match format_spec:
             case "full":
                 lines = pretty_print_lines(self.address, self.contents)

@@ -15,7 +15,7 @@ from pyrun._scripts.runnable import Runnable
 from pyrun._scripts.types import RunnableFormat
 
 
-@dataclass
+@dataclass(eq=False)
 class Pack(Runnable):
     name: str
     pre_run: Script | None = field(default=None)
@@ -116,6 +116,7 @@ class Pack(Runnable):
         return f"{super().caption}"
 
     def __format__(self, format_spec: RunnableFormat) -> str:
+        format_spec = format_spec or "short"
 
         match format_spec:
             case "full":
@@ -142,7 +143,7 @@ class Pack(Runnable):
     def __str__(self) -> str:
         return self.__format__("short")
 
-    def run(self, executor: BashPrefixExecutor):
+    def do_prerun(self, executor: BashPrefixExecutor):
         if self.pre_run:
             pr = executor.try_exec(
                 cwd=self.pre_run.path.parent,
@@ -150,12 +151,9 @@ class Pack(Runnable):
                 prefix=self.address,
             )
             if pr.returncode > 0:
-                greyline = colored(
-                    f"Pre-run script failed; skipping pack {self.address}",
-                    color="light_grey",
-                    attrs=["bold"],
-                )
-                print(greyline, "\n")
-                return
+                return False
+        return True
+
+    def run(self, executor: BashPrefixExecutor):
         for x in self.kids:
             x.run(executor)

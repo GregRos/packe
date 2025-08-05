@@ -9,7 +9,7 @@
       "env": {
         "TEST_ROOT": "./testdata"
       },
-      "args": ["-C ./testdata/config.yaml", "run", "%"]
+      "args": ["-C ./testdata/config.yaml", "run", "prerun-fail/1-2"]
     }
   ]
 }
