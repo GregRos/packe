@@ -5,7 +5,7 @@ from subprocess import STDOUT, Popen
 from typing import Protocol
 
 from termcolor import colored
-from pyrun._root import package_root
+from spack._root import package_root
 
 
 class ExecInfo(Protocol):

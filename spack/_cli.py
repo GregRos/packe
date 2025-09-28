@@ -5,8 +5,8 @@ from sys import stderr
 from typing import Iterable, Sequence, Union
 from ._print import fatal_error
 
-from pyrun._command import Command
-from pyrun._matching.script_selectors import parse_selector_list
+from spack._command import Command
+from spack._matching.script_selectors import parse_selector_list
 
 
 def _add_selector(p: argparse.ArgumentParser):

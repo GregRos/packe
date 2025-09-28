@@ -5,7 +5,7 @@ from re import S
 from typing import NotRequired, TypedDict
 from yaml import safe_load
 
-from pyrun._config import ConfigFile
+from spack._config import ConfigFile
 
 
 class ConfigFileWrapper:
@@ -20,7 +20,7 @@ class ConfigFileWrapper:
 
     @functools.cached_property
     def root_pack(self):
-        from pyrun._scripts import Pack
+        from spack._scripts import Pack
 
         root = Pack.root()
         for name, obj in self._data["entrypoints"].items():

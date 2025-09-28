@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "pyrun"
+name = "scriptpack"
 version = "0.5.0"
 description = "Runs bash scripts and stuff"
 authors = ["GregRos <gregros@gregros.dev>"]
 readme = "README.md"
-packages = [{ include = "pyrun" }]
+packages = [{ include = "scriptpack" }]
 [tool.poetry.dependencies]
 python = "3.11.*"
 pygments = "^2.19.1"

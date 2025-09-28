@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 
-from pyrun._exec.bash_exec_prefix import BashPrefixExecutor
-from pyrun._scripts.types import RunnableFormat
+from spack._exec.bash_exec_prefix import BashPrefixExecutor
+from spack._scripts.types import RunnableFormat
 
 
 @dataclass(eq=False)

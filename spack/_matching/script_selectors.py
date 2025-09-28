@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Iterable, Callable, TypeAlias, Union
 
 
 if TYPE_CHECKING:
-    from pyrun._scripts.runnable import Runnable
+    from spack._scripts.runnable import Runnable
 
     Selector: TypeAlias = Callable[[Runnable], bool]
 
@@ -49,7 +49,7 @@ def name_selector(name: str) -> Callable[[Runnable], bool]:
 
 
 def any_selector(
-    selectors: Iterable[Callable[[Runnable], bool]]
+    selectors: Iterable[Callable[[Runnable], bool]],
 ) -> Callable[[Runnable], bool]:
 
     def rule(script: Runnable):

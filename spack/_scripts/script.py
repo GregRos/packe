@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from pathlib import Path
-from pyrun._exec.bash_exec_prefix import BashPrefixExecutor
-from pyrun._scripts.indexed import (
+from spack._exec.bash_exec_prefix import BashPrefixExecutor
+from spack._scripts.indexed import (
     is_valid_script,
     must_parse_indexed,
     try_parse_indexed,
 )
-from pyrun._scripts.pretty_print import pretty_print_lines
-from pyrun._scripts.runnable import Runnable
+from spack._scripts.pretty_print import pretty_print_lines
+from spack._scripts.runnable import Runnable
 
 
 @dataclass(eq=False)

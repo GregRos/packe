@@ -6,10 +6,10 @@ from sys import platform
 
 from termcolor import colored
 
-from pyrun._cli import _Cli
-from pyrun._config_wrapper import ConfigFileWrapper
-from pyrun._exec.bash_exec_prefix import BashPrefixExecutor
-from pyrun._print import fatal_error
+from spack._cli import _Cli
+from spack._config_wrapper import ConfigFileWrapper
+from spack._exec.bash_exec_prefix import BashPrefixExecutor
+from spack._print import fatal_error
 
 
 def start():

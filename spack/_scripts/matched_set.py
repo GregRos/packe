@@ -1,8 +1,8 @@
 from time import sleep
 from termcolor import colored
-from pyrun._exec.bash_exec_prefix import BashPrefixExecutor
-from pyrun._scripts.runnable import Runnable
-from pyrun._scripts.script import Script
+from spack._exec.bash_exec_prefix import BashPrefixExecutor
+from spack._scripts.runnable import Runnable
+from spack._scripts.script import Script
 
 
 class MatchedSet(Runnable):
@@ -49,7 +49,7 @@ class MatchedSet(Runnable):
         )
 
     def __len__(self) -> int:
-        from pyrun._scripts.pack import Pack
+        from spack._scripts.pack import Pack
 
         count = 0
         for x in self.kids:
