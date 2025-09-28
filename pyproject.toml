@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "scriptpack"
+name = "spack"
 version = "0.5.0"
 description = "Runs bash scripts and stuff"
 authors = ["GregRos <gregros@gregros.dev>"]
 readme = "README.md"
-packages = [{ include = "scriptpack" }]
+packages = [{ include = "spack" }]
 [tool.poetry.dependencies]
 python = "3.11.*"
 pygments = "^2.19.1"
@@ -13,7 +13,7 @@ typeguard = "2.13.*"
 pyyaml = "^6.0.2"
 
 [tool.poetry.scripts]
-pyrun = "pyrun.main:start"
+spack = "spack.main:start"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

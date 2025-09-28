@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-source "$PYRUN_EXEC_DIR/utils.bash/colors.bash"
+source "$SPACK_EXEC_DIR/utils.bash/colors.bash"

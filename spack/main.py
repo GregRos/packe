@@ -14,13 +14,13 @@ from spack._print import fatal_error
 
 def start():
     if platform == "win32" or platform == "darwin":
-        fatal_error("Pyrun only supports Linux!", 3)
+        fatal_error("Spack only supports Linux!", 3)
 
     cli = _Cli()
     command = cli.parse()
     if command.command == "version":
-        v = importlib.metadata.version("pyrun")
-        print(colored(f"pyrun {v} / python {sys.version}", "green"))
+        v = importlib.metadata.version("spack")
+        print(colored(f"spack {v} / python {sys.version}", "green"))
         exit(0)
     cfg = ConfigFileWrapper(Path(command.config.strip()))
     if os.geteuid() != 0 and cfg.root_only:

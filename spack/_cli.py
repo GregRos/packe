@@ -58,8 +58,10 @@ class _Cli:
         if hasattr(args_result, "rule"):
             args_result.rule = parse_selector_list(args_result.rule)
         if not hasattr(args_result, "config"):
-            args_result.config = environ.get("PYRUN_CONFIG", None)
+            args_result.config = environ.get("PYRUN_CONFIG", None) or environ.get(
+                "SPACK_CONFIG", None
+            )
             if not args_result.config:
-                fatal_error("No config file specified and PYRUN_CONFIG not set", 2)
+                fatal_error("No config file specified and SPACK_CONFIG not set", 2)
 
         return args_result  # type: ignore

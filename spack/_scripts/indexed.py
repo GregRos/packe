@@ -1,9 +1,11 @@
 from pathlib import Path
+import re
 
 
 def try_parse_indexed(stem: str):
-    all = stem.split(".", maxsplit=1)
-    match all:
+    # split on first dot or hyphen, so "01.name" and "01-name" both work
+    parts = re.split(r"[.-]", stem, maxsplit=1)
+    match parts:
         case [name]:
             return None
         case ["", name]:

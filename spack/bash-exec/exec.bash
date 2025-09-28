@@ -1,18 +1,18 @@
-source "$PYRUN_EXEC_DIR/utils.bash/source-me.bash"
+source "$SPACK_EXEC_DIR/utils.bash/source-me.bash"
 
 exec > >(
     trap "" INT TERM
-    sed "s/^/$(sed -e 's/[&\\/]/\\&/g; s/$/\\/' -e '$s/\\$//' <<<"$PYRUN_PREFIX")/"
+    sed "s/^/$(sed -e 's/[&\\/]/\\&/g; s/$/\\/' -e '$s/\\$//' <<<"$SPACK_PREFIX")/"
 )
 exec 2> >(
     trap "" INT TERM
-    sed "s/^/$(sed -e 's/[&\\/]/\\&/g; s/$/\\/' -e '$s/\\$//' <<<"$PYRUN_PREFIX")/" >&2
+    sed "s/^/$(sed -e 's/[&\\/]/\\&/g; s/$/\\/' -e '$s/\\$//' <<<"$SPACK_PREFIX")/" >&2
 )
-if [ -n "$PYRUN_BEFORE" ]; then
-    source "$PYRUN_BEFORE"
+if [ -n "$SPACK_BEFORE" ]; then
+    source "$SPACK_BEFORE"
 fi
-if [ -z "$PYRUN_TARGET" ]; then
-    echo.error "PYRUN_TARGET is not set"
+if [ -z "$SPACK_TARGET" ]; then
+    echo.error "SPACK_TARGET is not set"
     exit 1
 fi
-source "$PYRUN_TARGET"
+source "$SPACK_TARGET"

@@ -54,7 +54,7 @@ class Pack(Runnable):
         else:
             name = index_root.name
             pos = None
-        prerun_path = [*index_root.glob("pyrun.pre*")]
+        prerun_path = [*index_root.glob("pyrun.pre*"), *index_root.glob("spack.pre*")]
         prerun_script: Script | None = None
         if prerun_path:
             prerun_path = prerun_path[0]
