@@ -1,7 +1,7 @@
 from typing import Iterable
 
 from termcolor import colored
-from spack._scripts.runnable import Runnable
+from packe._scripts.runnable import Runnable
 from pygments import highlight
 from pygments.formatters.terminal import TerminalFormatter
 from pygments.lexers.shell import BashLexer

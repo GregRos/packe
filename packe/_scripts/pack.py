@@ -5,14 +5,14 @@ from pathlib import Path
 from typing import Callable, Iterable
 
 from termcolor import colored
-from spack._exec.bash_exec_prefix import BashPrefixExecutor
-from spack._matching.script_selectors import parse_selector_list
-from spack._scripts.matched_set import MatchedSet
-from spack._scripts.pretty_print import pretty_print_kids
-from spack._scripts.script import Script
-from spack._scripts.indexed import must_parse_indexed, try_parse_indexed
-from spack._scripts.runnable import Runnable
-from spack._scripts.types import RunnableFormat
+from packe._exec.bash_exec_prefix import BashPrefixExecutor
+from packe._matching.script_selectors import parse_selector_list
+from packe._scripts.matched_set import MatchedSet
+from packe._scripts.pretty_print import pretty_print_kids
+from packe._scripts.script import Script
+from packe._scripts.indexed import must_parse_indexed, try_parse_indexed
+from packe._scripts.runnable import Runnable
+from packe._scripts.types import RunnableFormat
 
 
 @dataclass(eq=False)
@@ -54,7 +54,10 @@ class Pack(Runnable):
         else:
             name = index_root.name
             pos = None
-        prerun_path = [*index_root.glob("pyrun.pre*"), *index_root.glob("spack.pre*")]
+        prerun_path = [
+            *index_root.glob("pyrun.pre*"),
+            *index_root.glob("packe.pre*"),
+        ]
         prerun_script: Script | None = None
         if prerun_path:
             prerun_path = prerun_path[0]
@@ -125,7 +128,9 @@ class Pack(Runnable):
                 return ": ".join(
                     [
                         self.name,
-                        ", ".join(f"{x:child}" for x in self.kids if x.is_visible),
+                        ", ".join(
+                            f"{x:child}" for x in self.kids if x.is_visible
+                        ),
                     ]
                 )
             case "child":

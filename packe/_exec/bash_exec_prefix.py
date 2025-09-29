@@ -5,7 +5,7 @@ from subprocess import STDOUT, Popen
 from typing import Protocol
 
 from termcolor import colored
-from spack._root import package_root
+from packe._root import package_root
 
 
 class ExecInfo(Protocol):
@@ -29,7 +29,7 @@ class BashPrefixExecutor:
         self.before = before
 
     def _build_env(self, prefix: str, path: Path):
-        env_exec_dir = str(package_root / "spack" / "bash-exec")
+        env_exec_dir = str(package_root / "packe" / "bash-exec")
         env_before = str(self.before if self.before else "")
         env_prefix = colored(f"[{prefix}] ", "cyan")
         env_target = str(path.absolute())
@@ -38,10 +38,10 @@ class BashPrefixExecutor:
             "PYRUN_BEFORE": env_before,
             "PYRUN_PREFIX": env_prefix,
             "PYRUN_TARGET": env_target,
-            "SPACK_EXEC_DIR": env_exec_dir,
-            "SPACK_BEFORE": env_before,
-            "SPACK_PREFIX": env_prefix,
-            "SPACK_TARGET": env_target,
+            "PACKE_EXEC_DIR": env_exec_dir,
+            "PACKE_BEFORE": env_before,
+            "PACKE_PREFIX": env_prefix,
+            "PACKE_TARGET": env_target,
             **os.environ,
         }
         return env
@@ -52,7 +52,7 @@ class BashPrefixExecutor:
         cwd: Path,
         prefix: str,
     ):
-        exec_dir = package_root / "spack" / "bash-exec"
+        exec_dir = package_root / "packe" / "bash-exec"
         exec_target = str(exec_dir / "exec.bash")
         bash_path = which("bash")
         if not bash_path:

@@ -1,6 +1,6 @@
-# spack
+# packe
 
-Spack is a script runner for executing configuration scripts in bulk. Supports flexible script selection and hierachical structure.
+packe is a script runner for executing configuration scripts in bulk. Supports flexible script selection and hierachical structure.
 
 ## Features
 
@@ -14,7 +14,7 @@ Spack is a script runner for executing configuration scripts in bulk. Supports f
 
 ## Script
 
-A spack script is a bash file that is executed by spack. Spack script files must end with `.bash` or `.sh`. They also need to be indexed, kind of like `conf.d` files.
+A packe script is a bash file that is executed by packe. packe script files must end with `.bash` or `.sh`. They also need to be indexed, kind of like `conf.d` files.
 
 You can index scripts using `-` or `.` as separators. Scripts are normally indexed using numbers, but you can also use underscores. Underscored scripts can only be executed explicitly by name.
 
@@ -27,7 +27,7 @@ _.do-stuff.bash
 _-do-more-stuff.sh
 ```
 
-Files that aren't indexed using numbers or underscores aren't considered executable by spack.
+Files that aren't indexed using numbers or underscores aren't considered executable by packe.
 
 ### Script pack
 
@@ -49,7 +49,7 @@ When a script pack is executed, all its _numbered_ contents are executed recursi
 
 Packs let you organize scripts into groups. For example, you can have a pack for setting up a database, and another for setting up a web server.
 
-Folders that aren't indexed using numbers or underscores aren't considered executable by spack.
+Folders that aren't indexed using numbers or underscores aren't considered executable by packe.
 
 ### Root
 
@@ -126,7 +126,7 @@ root/2-second/03-configure.bash
 
 ## Config file
 
-Spack uses a YAML file to define script roots. The config file is a YAML file.
+packe uses a YAML file to define script roots. The config file is a YAML file.
 
 Here is an example of a config file:
 
@@ -139,25 +139,25 @@ entrypoints:
     path: ./two
 ```
 
-You can pass the config file to spack using the `-C`/`--config` option or by setting the `SPACK_CONFIG` environment variable.
+You can pass the config file to packe using the `-C`/`--config` option or by setting the `PACKE_CONFIG` environment variable.
 
 ## Usage
 
-First you need to give spack a config file. You can do this in two ways:
+First you need to give packe a config file. You can do this in two ways:
 
 - The `-C`/`--config` option which should appear before any command.
-- The `SPACK_CONFIG` env var.
+- The `PACKE_CONFIG` env var.
 
 Examples:
 
 ```bash
-spack -C example/config.yaml run root/1
+packe -C example/config.yaml run root/1
 
-export SPACK_CONFIG=example/config.yaml
-spack run root/1
+export PACKE_CONFIG=example/config.yaml
+packe run root/1
 ```
 
-In the following examples, **we’ll assume SPACK_CONFIG is set accordingly.**
+In the following examples, **we’ll assume PACKE_CONFIG is set accordingly.**
 
 ### Run
 
@@ -166,8 +166,8 @@ This lets you run script based on run selectors. You can use more than one run s
 Scripts will be executed in the order specified and lexicographic order within each selector.
 
 ```bash
-spack run SELECTOR1 [SELECTOR2 SELECTOR2 ...]
-spack run folder/1-5,extra/5,9,db root/2/stuff
+packe run SELECTOR1 [SELECTOR2 SELECTOR2 ...]
+packe run folder/1-5,extra/5,9,db root/2/stuff
 ```
 
 ### List
@@ -175,8 +175,8 @@ spack run folder/1-5,extra/5,9,db root/2/stuff
 Works like `run` but lists the names of scripts and packs that would be run by a list of selectors. This doesn’t run prerun scripts.
 
 ```bash
-spack list SELECTOR1 [SELECTOR2 SELECTOR2 ...]
-spack list folder/%/4
+packe list SELECTOR1 [SELECTOR2 SELECTOR2 ...]
+packe list folder/%/4
 ```
 
 ### Print
@@ -184,21 +184,21 @@ spack list folder/%/4
 This pretty prints scripts contents with syntax highlighting. All the matched scripts will be printed. For example, this will print script `2` in pack `1`:
 
 ```bash
-spack print SELECTOR1 [SELECTOR2 SELECTOR3 ...]
-spack print folder/1/2
+packe print SELECTOR1 [SELECTOR2 SELECTOR3 ...]
+packe print folder/1/2
 ```
 
 ## Extra features
 
-Spack scripts have some extra features that make them easier to use.
+packe scripts have some extra features that make them easier to use.
 
 ### Prerun scripts
 
 A prerun script is a special script that determines whether to execute a given pack. They're used as a failsafe to make sure sensitive configuration scripts are only executed when certain conditions are met.
 
-Prerun scripts must be named `spack.pre.bash` or `spack.pre.sh`.
+Prerun scripts must be named `packe.pre.bash` or `packe.pre.sh`.
 
-When you execute a `run` command, spack will go down the pack tree and execute every prerun script it finds. If a prerun script exits with a non-zero status, the entire pack is skipped.
+When you execute a `run` command, packe will go down the pack tree and execute every prerun script it finds. If a prerun script exits with a non-zero status, the entire pack is skipped.
 
 These prerun scripts will always be executed, no matter how you match the scripts.
 
@@ -206,9 +206,9 @@ For example, let's say you have:
 
 ```
 root/
-  spack.pre.bash
+  packe.pre.bash
   1.first/
-    spack.pre.bash
+    packe.pre.bash
     001.setup.bash
     002.install.bash
   2.second/
@@ -216,11 +216,11 @@ root/
     02.install.bash
 ```
 
-And you run the selector `root/1/setup`. Spack will execute the prerun files in the following order:
+And you run the selector `root/1/setup`. packe will execute the prerun files in the following order:
 
 ```
-root/spack.pre.bash
-root/1.first/spack.pre.bash
+root/packe.pre.bash
+root/1.first/packe.pre.bash
 ```
 
 The script won't be executed if either of those files exits with a non-zero status.
@@ -229,7 +229,7 @@ Note that each prerun is executed only once per `run` command, even if multiple 
 
 ### Echo with colors
 
-Spack scripts can use special echo commands to print colored text to the terminal. These commands are:
+packe scripts can use special echo commands to print colored text to the terminal. These commands are:
 
 ```bash
 echo.red "This text will be red"
@@ -241,7 +241,7 @@ echo.blue "This text will be blue"
 
 ### Echo with levels
 
-Spack scripts can also use special echo commands to print text with different levels of importance. These commands are:
+packe scripts can also use special echo commands to print text with different levels of importance. These commands are:
 
 ```bash
 echo.info "Informational"

@@ -1,8 +1,8 @@
 from time import sleep
 from termcolor import colored
-from spack._exec.bash_exec_prefix import BashPrefixExecutor
-from spack._scripts.runnable import Runnable
-from spack._scripts.script import Script
+from packe._exec.bash_exec_prefix import BashPrefixExecutor
+from packe._scripts.runnable import Runnable
+from packe._scripts.script import Script
 
 
 class MatchedSet(Runnable):
@@ -44,12 +44,16 @@ class MatchedSet(Runnable):
             kid.run(executor)
         sleep(0.1)
         print(
-            colored(f"      ↑ DONE ↑      ", color="white", on_color="on_light_green"),
+            colored(
+                f"      ↑ DONE ↑      ",
+                color="white",
+                on_color="on_light_green",
+            ),
             "\n",
         )
 
     def __len__(self) -> int:
-        from spack._scripts.pack import Pack
+        from packe._scripts.pack import Pack
 
         count = 0
         for x in self.kids:

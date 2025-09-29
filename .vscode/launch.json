@@ -5,7 +5,7 @@
       "name": "Launch src/runner.py??",
       "request": "launch",
       "type": "debugpy",
-      "module": "spack",
+      "module": "packe",
       "env": {
         "TEST_ROOT": "./testdata"
       },

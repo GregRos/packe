@@ -6,21 +6,21 @@ from sys import platform
 
 from termcolor import colored
 
-from spack._cli import _Cli
-from spack._config_wrapper import ConfigFileWrapper
-from spack._exec.bash_exec_prefix import BashPrefixExecutor
-from spack._print import fatal_error
+from packe._cli import _Cli
+from packe._config_wrapper import ConfigFileWrapper
+from packe._exec.bash_exec_prefix import BashPrefixExecutor
+from packe._print import fatal_error
 
 
 def start():
     if platform == "win32" or platform == "darwin":
-        fatal_error("Spack only supports Linux!", 3)
+        fatal_error("packe only supports Linux!", 3)
 
     cli = _Cli()
     command = cli.parse()
     if command.command == "version":
-        v = importlib.metadata.version("spack")
-        print(colored(f"spack {v} / python {sys.version}", "green"))
+        v = importlib.metadata.version("packe")
+        print(colored(f"packe {v} / python {sys.version}", "green"))
         exit(0)
     cfg = ConfigFileWrapper(Path(command.config.strip()))
     if os.geteuid() != 0 and cfg.root_only:

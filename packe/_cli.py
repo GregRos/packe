@@ -5,30 +5,38 @@ from sys import stderr
 from typing import Iterable, Sequence, Union
 from ._print import fatal_error
 
-from spack._command import Command
-from spack._matching.script_selectors import parse_selector_list
+from packe._command import Command
+from packe._matching.script_selectors import parse_selector_list
 
 
 def _add_selector(p: argparse.ArgumentParser):
     p.add_argument(
         "selector",
         nargs="+",
-        help="one or more run selectors for spack scripts and packs to run.",
+        help="one or more run selectors for packe scripts and packs to run.",
     )
 
 
 class _Cli:
     def __init__(self):
-        root_parser = argparse.ArgumentParser(description="Perdido setup script runner")
+        root_parser = argparse.ArgumentParser(
+            description="Perdido setup script runner"
+        )
 
         root_parser.add_argument(
-            "-C", "--config", help="path to a config file", required=False, type=str
+            "-C",
+            "--config",
+            help="path to a config file",
+            required=False,
+            type=str,
         )
         subparsers = root_parser.add_subparsers(
             title="command", required=True, dest="command"
         )
 
-        version = subparsers.add_parser("version", help="print the version and exit")
+        version = subparsers.add_parser(
+            "version", help="print the version and exit"
+        )
 
         run = subparsers.add_parser(
             "run",
@@ -46,7 +54,9 @@ class _Cli:
         _add_selector(run)
         list = subparsers.add_parser("list", help="list installation scripts")
         _add_selector(list)
-        printing = subparsers.add_parser("print", help="print installation scripts")
+        printing = subparsers.add_parser(
+            "print", help="print installation scripts"
+        )
         _add_selector(printing)
 
         self._parser = root_parser
@@ -58,10 +68,12 @@ class _Cli:
         if hasattr(args_result, "rule"):
             args_result.rule = parse_selector_list(args_result.rule)
         if not hasattr(args_result, "config"):
-            args_result.config = environ.get("PYRUN_CONFIG", None) or environ.get(
-                "SPACK_CONFIG", None
-            )
+            args_result.config = environ.get(
+                "PYRUN_CONFIG", None
+            ) or environ.get("PACKE_CONFIG", None)
             if not args_result.config:
-                fatal_error("No config file specified and SPACK_CONFIG not set", 2)
+                fatal_error(
+                    "No config file specified and PACKE_CONFIG not set", 2
+                )
 
         return args_result  # type: ignore

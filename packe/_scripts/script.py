@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from pathlib import Path
-from spack._exec.bash_exec_prefix import BashPrefixExecutor
-from spack._scripts.indexed import (
+from packe._exec.bash_exec_prefix import BashPrefixExecutor
+from packe._scripts.indexed import (
     is_valid_script,
     must_parse_indexed,
     try_parse_indexed,
 )
-from spack._scripts.pretty_print import pretty_print_lines
-from spack._scripts.runnable import Runnable
+from packe._scripts.pretty_print import pretty_print_lines
+from packe._scripts.runnable import Runnable
 
 
 @dataclass(eq=False)
@@ -23,7 +23,9 @@ class Script(Runnable):
 
     @staticmethod
     def is_valid_indexed(path: Path):
-        return try_parse_indexed(path.stem) is not None and is_valid_script(path)
+        return try_parse_indexed(path.stem) is not None and is_valid_script(
+            path
+        )
 
     @classmethod
     def from_indexed_path(cls, parent: Runnable, path: Path):
@@ -35,7 +37,9 @@ class Script(Runnable):
         return Script(pos, str, parent, path)
 
     @staticmethod
-    def from_named(parent: Runnable | None, path: Path, name: str | None = None):
+    def from_named(
+        parent: Runnable | None, path: Path, name: str | None = None
+    ):
         name = name or path.stem
         return Script(None, name, parent, path)
 

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Iterable, Callable, TypeAlias, Union
 
 
 if TYPE_CHECKING:
-    from spack._scripts.runnable import Runnable
+    from packe._scripts.runnable import Runnable
 
     Selector: TypeAlias = Callable[[Runnable], bool]
 
@@ -18,7 +18,9 @@ def trivial_selector(yes_no: bool) -> Callable[[Runnable], bool]:
     return rule
 
 
-def range_selector(start: int | None, end: int | None) -> Callable[[Runnable], bool]:
+def range_selector(
+    start: int | None, end: int | None
+) -> Callable[[Runnable], bool]:
 
     def rule(script: Runnable):
         if script.pos is None:

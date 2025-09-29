@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 
-from spack._exec.bash_exec_prefix import BashPrefixExecutor
-from spack._scripts.types import RunnableFormat
+from packe._exec.bash_exec_prefix import BashPrefixExecutor
+from packe._scripts.types import RunnableFormat
 
 
 @dataclass(eq=False)

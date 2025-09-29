@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "spack"
-version = "0.5.0"
+name = "packe"
+version = "0.6.0"
 description = "Flexible bash script runner."
 authors = ["GregRos <gregros@gregros.dev>"]
 readme = "README.md"
 license = "MIT"
-homepage = "https://github.com/GregRos/spack"
+homepage = "https://github.com/GregRos/packe"
 include = [
-    { path = "spack/" },
+    { path = "packe/" },
     { path = "README.md" },
     { path = "pyproject.toml" },
 ]
@@ -19,7 +19,7 @@ typeguard = "2.13.*"
 pyyaml = "^6.0.2"
 
 [tool.poetry.scripts]
-spack = "spack.main:start"
+packe = "packe.main:start"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
