@@ -1,114 +1,39 @@
 # spack
 
-A bash script runner using indexed scripts and folders and multiple configuration options. Written in Python.
-## Usage
-This will run scripts `1` and `2` in the root called `folder`, using the given config file. A config file can be specified using:
+Spack is a script runner for executing configuration scripts in bulk. Supports flexible script selection and hierachical structure.
 
-- The `-C` option which should appear before any command.
-- The `SPACK_CONFIG` env var.
+## Features
 
-Examples:
-```bash
-spack -C example/config.yaml run root/1
+- Execute indexed bash scripts in order.
+- Script output prefixed with identifier.
+- Organize scripts into indexed packs (folders).
+- Use prerun scripts to conditionally run packs.
+- Use a config file to define script roots.
+- Flexible script selection using run selectors with ranges and wildcards.
+- Extra bash commands for colored output in scripts.
 
-export SPACK_CONFIG=example/config.yaml
-spack run root/1
-```
+## Script
 
-In the following examples, **we’ll assume SPACK_CONFIG is set accordingly.**
-### Run
-You run scripts using one or more *script selectors*, strings that determines which scripts to run. Each script selector is a glob-like path. Each path segment can be:
+A spack script is a bash file that is executed by spack. Spack script files must end with `.bash` or `.sh`. They also need to be indexed, kind of like `conf.d` files.
 
-- A number, which matches the index
-- A name, which matches the `*.NAME` 
-- A filename
+You can index scripts using `-` or `.` as separators. Scripts are normally indexed using numbers, but you can also use underscores. Underscored scripts can only be executed explicitly by name.
 
-Several of these sub selectors can be combined using the `,` and `-` chars.
-
-- `a,b` means run scripts `a` and `b`
-- `1-9` means run scripts `1` through `9`.
-
-Note that these sub selectors don’t expand across path segments.
-
-For example, the following will run packs 1 to 5, and in each of those scripts 5 and 9:
-
-```bash
-spack run folder/1-5/5,9
-```
-
-You can use the `%` symbol as a wildcard like `*`. This lets you run *all the scripts in a folder*. This lets you do things like run script `4` inside every pack:
-
-```bash
-spack run folder/%/4
-```
-
-Note that using `%` will actually match all scripts and packs, including underscored ones.
-
-You can also run multiple selectors:
-```bash
-spack run folder/1 folder/5
-```
-### List
-Works like `run` but lists the names of scripts and packs that would be run by a list of selectors. This doesn’t run prerun scripts.
-
-```bash
-spack list folder/%/4
-```
-
-### Print
-This prints scripts contents. All the matched scripts will be printed. For example, this will print script `2` in pack `1`:
-
-```bash
-spack print folder/1/2
-```
-
-## Script files
-Spack runs *indexed script files* using `bash`. These files should end with `.bash` or `.sh`. Files should follow the standard `conf.d` Linux convention:
+Here are some examples of valid script filenames:
 
 ```
 01-setup.bash
-02-install.bash
-```
-
-Alternatively, they can also use periods:
-
-```
-01.setup.bash
 02.install.bash
-```
-
-### Unnumbered files
-Spack can run unnumbered scripts. These can’t be executed using ranges. They are either executed by name or using the `%` wildcard which matches them too.
-
-Unnumbered command scripts should use `_` instead of a number:
-
-```bash
 _.do-stuff.bash
-_-blah.bash
+_-do-more-stuff.sh
 ```
 
-Other `bash` or `sh` files aren’t considered executable by Spack.
-### Extra commands
-Inside a script file, you have a few extra commands that are sourced into the script.
-#### Echo Color
-```bash
-echo.red "This text will be red"
-echo.green "This text will be green"
-echo.yellow "This text will be yellow"
-echo.white "This text will be white"
-echo.blue "This text will be blue"
-```
+Files that aren't indexed using numbers or underscores aren't considered executable by spack.
 
-#### Echo Level, Section
-These all echo to stdout but format the output based on the log level.
-```bash
-echo.info "Informational"
-echo.warn "Warning"
-echo.error "Error"
-echo.section "Section named across several rows"
-```
-## Script pack
-A script pack is a an indexed folder that contains more indexed scripts or packs:
+### Script pack
+
+A _script pack_ is an indexed folder that contains more indexed scripts or packs. Script packs are indexed using numbers or underscores, just like scripts.
+
+Here is an example folder structure with several script packs:
 
 ```
 root/
@@ -120,52 +45,90 @@ root/
         02.install.bash
 ```
 
-When a script pack is executed, all its *numbered* contents are executed recursively in lexicographic order. This doesn’t include `_` scripts or packs.
+When a script pack is executed, all its _numbered_ contents are executed recursively in lexicographic order. This doesn’t include `_` scripts or packs.
 
-A pack can include other packs and scripts. They share the same ordering.
+Packs let you organize scripts into groups. For example, you can have a pack for setting up a database, and another for setting up a web server.
 
-```bash
-root/
-	1.first/
-		1.setup.bash
-		2.install/
-			1.packages.bash
+Folders that aren't indexed using numbers or underscores aren't considered executable by spack.
+
+### Root
+
+A _root_ is a special script pack that is defined in the config file. A root can contain other packs or scripts. It doesn't have any naming requirements.
+
+### Run selector
+
+A _run selector_ is a glob-like path that determines which scripts to run. It can include ranges and wildcards.
+
+Run selectors are made of path segments separated by `/`. Each segment can be one or more references to a script or pack. There are several ways to reference scripts or packs.
+
+Here are some examples of valid run selectors:
+
+```
+one/hello/1-5
+folder/%/3
+root/1,3,5
+root/web,db/4-5/install
 ```
 
-### Unnumbered packs
-Packs can be unnumbered like scripts. Unnumbered packs can only be executed explicitly by name. Unnumbered packs can contain numbered scripts.
+Run selectors match all scripts and packs that fit the criteria.
 
-```bash
-root/
-	_.unnumbered/
-		1.install.bash
-		2.setup.bash
+#### Numbers
+
+Numbers match index of the script or pack. For example, `1` matches:
+
+```
+01-setup.bash
+1-folder/
 ```
 
-### Prerun
-Prerun script files are special files in a pack folder that determine whether to run the folder in the current environment. They can be used as failsafes.
+Numbers can still match multiple files.
 
-A prerun script must be called `pre.spack.*`. Each pack can have one of these files, but a script can be affected by multiple preruns in nested folders. 
+#### Ranges
 
-If any prerun script exits with a non-zero exit code no scripts belonging to its pack will be executed.
+You can also use ranges. For example, `1-3` would match:
 
-Here is an example of a pack structure using prerun files:
-
-```bash
-root/
-	1.maybe/
-		1.possibly/
-			1.could-be.bash
-			spack.pre.bash
-		spack.pre.bash
-		
+```
+01-setup.bash
+02-install.bash
+03-configure.bash
 ```
 
-The `1.could-be.bash` file can’t be executed unless both of the prerun files here are executed.
+#### Names
 
-Prerun files can also be placed inside a root.
-## Config
-Spack uses a config file to tell which scripts to execute. Here is an example of a config file:
+Names match the unindexed name part of the script or pack. For example, `run/setup` would match:
+
+```
+01-setup.bash
+02-setup.bash
+1-setup/
+```
+
+Names are the only way to match unnumbered scripts and packs. However, unnumbered packs can still contain numbered scripts that can be matched using numbers or ranges.
+
+#### Commas
+
+Commas let you combine multiple references. For example, `1,3,go` would match:
+
+```
+01-setup.bash
+03-install.bash
+1-go/
+```
+
+#### Wildcards
+
+The `%` symbol acts as a wildcard that matches all _numbered_ scripts and packs in a folder. For example, `folder/%/3` would match:
+
+```
+root/1-first/03-configure.bash
+root/2-second/03-configure.bash
+```
+
+## Config file
+
+Spack uses a YAML file to define script roots. The config file is a YAML file.
+
+Here is an example of a config file:
 
 ```yaml
 before: ./before.bash
@@ -174,19 +137,117 @@ entrypoints:
     path: ./one
   two:
     path: ./two
-  prerun-fail:
-    path: ./prerun-fail
-  prerun-succeed:
-    path: ./prerun-pass
 ```
 
-Each of the entrypoint paths is a *root* which works like a pack but doesn’t need to be indexed. The name of the root is the first path segment you give the `run` command. Using `%` here will run all the roots.
+You can pass the config file to spack using the `-C`/`--config` option or by setting the `SPACK_CONFIG` environment variable.
+
+## Usage
+
+First you need to give spack a config file. You can do this in two ways:
+
+- The `-C`/`--config` option which should appear before any command.
+- The `SPACK_CONFIG` env var.
+
+Examples:
 
 ```bash
-spack run one/1
-spack run prerun-succeed/%
-spack run %/1
+spack -C example/config.yaml run root/1
+
+export SPACK_CONFIG=example/config.yaml
+spack run root/1
 ```
 
-The `before` script file is optional. If present, it will be sourced before each script execution. 
+In the following examples, **we’ll assume SPACK_CONFIG is set accordingly.**
 
+### Run
+
+This lets you run script based on run selectors. You can use more than one run selector, separated by spaces.
+
+Scripts will be executed in the order specified and lexicographic order within each selector.
+
+```bash
+spack run SELECTOR1 [SELECTOR2 SELECTOR2 ...]
+spack run folder/1-5,extra/5,9,db root/2/stuff
+```
+
+### List
+
+Works like `run` but lists the names of scripts and packs that would be run by a list of selectors. This doesn’t run prerun scripts.
+
+```bash
+spack list SELECTOR1 [SELECTOR2 SELECTOR2 ...]
+spack list folder/%/4
+```
+
+### Print
+
+This pretty prints scripts contents with syntax highlighting. All the matched scripts will be printed. For example, this will print script `2` in pack `1`:
+
+```bash
+spack print SELECTOR1 [SELECTOR2 SELECTOR3 ...]
+spack print folder/1/2
+```
+
+## Extra features
+
+Spack scripts have some extra features that make them easier to use.
+
+### Prerun scripts
+
+A prerun script is a special script that determines whether to execute a given pack. They're used as a failsafe to make sure sensitive configuration scripts are only executed when certain conditions are met.
+
+Prerun scripts must be named `spack.pre.bash` or `spack.pre.sh`.
+
+When you execute a `run` command, spack will go down the pack tree and execute every prerun script it finds. If a prerun script exits with a non-zero status, the entire pack is skipped.
+
+These prerun scripts will always be executed, no matter how you match the scripts.
+
+For example, let's say you have:
+
+```
+root/
+  spack.pre.bash
+  1.first/
+    spack.pre.bash
+    001.setup.bash
+    002.install.bash
+  2.second/
+    01.setup.bash
+    02.install.bash
+```
+
+And you run the selector `root/1/setup`. Spack will execute the prerun files in the following order:
+
+```
+root/spack.pre.bash
+root/1.first/spack.pre.bash
+```
+
+The script won't be executed if either of those files exits with a non-zero status.
+
+Note that each prerun is executed only once per `run` command, even if multiple scripts in the pack are matched explicitly or you use multiple selectors.
+
+### Echo with colors
+
+Spack scripts can use special echo commands to print colored text to the terminal. These commands are:
+
+```bash
+echo.red "This text will be red"
+echo.green "This text will be green"
+echo.yellow "This text will be yellow"
+echo.white "This text will be white"
+echo.blue "This text will be blue"
+```
+
+### Echo with levels
+
+Spack scripts can also use special echo commands to print text with different levels of importance. These commands are:
+
+```bash
+echo.info "Informational"
+echo.warn "Warning"
+echo.error "Error"
+echo.section "Clearly visible section across several rows"
+```
+
+All of these commands print to standard output, but they format the output based on the log level.

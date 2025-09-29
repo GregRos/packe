@@ -13,7 +13,7 @@ def _add_selector(p: argparse.ArgumentParser):
     p.add_argument(
         "selector",
         nargs="+",
-        help="a multipart selector for the installation scripts to run.",
+        help="one or more run selectors for spack scripts and packs to run.",
     )
 
 
