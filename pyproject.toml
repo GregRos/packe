@@ -1,10 +1,16 @@
 [tool.poetry]
 name = "spack"
 version = "0.5.0"
-description = "Runs bash scripts and stuff"
+description = "Flexible bash script runner."
 authors = ["GregRos <gregros@gregros.dev>"]
 readme = "README.md"
-packages = [{ include = "spack" }]
+license = "MIT"
+homepage = "https://github.com/GregRos/spack"
+include = [
+    { path = "spack/" },
+    { path = "README.md" },
+    { path = "pyproject.toml" },
+]
 [tool.poetry.dependencies]
 python = "3.11.*"
 pygments = "^2.19.1"
@@ -17,5 +23,6 @@ spack = "spack.main:start"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-[tool.setuptools.package-data]
-"*" = ["*.*"]
+
+[tool.black]
+line-length = 80

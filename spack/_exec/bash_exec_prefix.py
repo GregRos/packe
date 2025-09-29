@@ -29,7 +29,7 @@ class BashPrefixExecutor:
         self.before = before
 
     def _build_env(self, prefix: str, path: Path):
-        env_exec_dir = str(package_root / "pyrun" / "bash-exec")
+        env_exec_dir = str(package_root / "spack" / "bash-exec")
         env_before = str(self.before if self.before else "")
         env_prefix = colored(f"[{prefix}] ", "cyan")
         env_target = str(path.absolute())
