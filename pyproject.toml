@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "packe"
-version = "0.6.1"
+version = "0.7.0"
 description = "Flexible bash script runner."
 authors = ["GregRos <gregros@gregros.dev>"]
 readme = "README.md"
