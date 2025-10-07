@@ -6,7 +6,7 @@ from sys import platform
 
 from termcolor import colored
 
-from packe._cli import _Cli
+from packe._cli import Cli
 from packe._config_wrapper import ConfigFileWrapper
 from packe._exec.bash_exec_prefix import BashPrefixExecutor
 from packe._print import fatal_error
@@ -16,7 +16,7 @@ def start():
     if platform == "win32" or platform == "darwin":
         fatal_error("packe only supports Linux!", 3)
 
-    cli = _Cli()
+    cli = Cli()
     command = cli.parse()
     if command.command == "version":
         v = importlib.metadata.version("packe")

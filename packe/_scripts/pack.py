@@ -17,10 +17,9 @@ from packe._scripts.types import RunnableFormat
 
 @dataclass(eq=False)
 class Pack(Runnable):
-    name: str
     pre_run: Script | None = field(default=None)
 
-    _kids: list[Runnable] = field(init=False, default_factory=list)
+    _kids: list[Runnable] = field(init=False, default_factory=list[Runnable])
 
     @property
     def kids(self):
@@ -62,7 +61,7 @@ class Pack(Runnable):
         if prerun_path:
             prerun_path = prerun_path[0]
             prerun_script = Script.from_named(parent, prerun_path)
-        p = Pack(pos, name, parent, prerun_script)
+        p = Pack(pos, name or "?", parent, prerun_script)
 
         def make_kid(path: Path):
             if path.is_dir():
@@ -90,7 +89,7 @@ class Pack(Runnable):
 
             results = [self]
             for selector in selector_list:
-                next_results = []
+                next_results: list[Runnable] = []
                 for x in results:
                     assert isinstance(
                         x, Pack
@@ -118,7 +117,7 @@ class Pack(Runnable):
     def caption(self):
         return f"{super().caption}"
 
-    def __format__(self, format_spec: RunnableFormat) -> str:
+    def __format__(self, format_spec: str) -> str:
         format_spec = format_spec or "short"
 
         match format_spec:
@@ -127,7 +126,7 @@ class Pack(Runnable):
             case "line":
                 return ": ".join(
                     [
-                        self.name,
+                        self.name or "?",
                         ", ".join(
                             f"{x:child}" for x in self.kids if x.is_visible
                         ),

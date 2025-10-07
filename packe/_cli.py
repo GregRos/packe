@@ -17,7 +17,7 @@ def _add_selector(p: argparse.ArgumentParser):
     )
 
 
-class _Cli:
+class Cli:
     def __init__(self):
         root_parser = argparse.ArgumentParser(
             description="Perdido setup script runner"
@@ -34,9 +34,7 @@ class _Cli:
             title="command", required=True, dest="command"
         )
 
-        version = subparsers.add_parser(
-            "version", help="print the version and exit"
-        )
+        subparsers.add_parser("version", help="print the version and exit")
 
         run = subparsers.add_parser(
             "run",

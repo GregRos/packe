@@ -73,12 +73,12 @@ class MatchedSet(Runnable):
         format_spec = format_spec or "short"
         match format_spec:
             case "full":
-                texts = []
+                texts: list[str] = []
                 for kid in self.kids:
                     texts.append(f"{kid:full}")
                 return "\n".join(texts)
             case "summary":
-                lines = []
+                lines: list[str] = []
                 for script in self:
                     lines.append(f"{script:short}")
                 return "\n".join(lines)

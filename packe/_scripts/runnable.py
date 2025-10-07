@@ -40,10 +40,10 @@ class Runnable(ABC):
 
     @property
     def caption(self):
-        parts = []
+        parts: list[str] = []
         if self.pos:
             parts.append(str(self.pos).zfill(2))
-        parts.append(self.name)
+        parts.append(self.name or "?")
         return ":".join(parts)
 
     @abstractmethod
@@ -53,7 +53,7 @@ class Runnable(ABC):
     def run(self, executor: BashPrefixExecutor): ...
 
     @abstractmethod
-    def __format__(self, format_spec: RunnableFormat) -> str: ...
+    def __format__(self, format_spec: str) -> str: ...
     @abstractmethod
     def __repr__(self) -> str: ...
 

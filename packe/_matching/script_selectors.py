@@ -10,10 +10,10 @@ if TYPE_CHECKING:
     Selector: TypeAlias = Callable[[Runnable], bool]
 
 
-def trivial_selector(yes_no: bool) -> Callable[[Runnable], bool]:
+def indexed_selector() -> Callable[[Runnable], bool]:
 
     def rule(script: Runnable):
-        return yes_no
+        return script.pos is not None
 
     return rule
 
@@ -62,7 +62,7 @@ def any_selector(
 
 def parse_selector(selector: str) -> Callable[[Runnable], bool]:
     if selector == "%":
-        return trivial_selector(True)
+        return indexed_selector()
     elif "-" in selector:
         [before, after] = selector.split("-")
         # Either '-1' or '1-2':

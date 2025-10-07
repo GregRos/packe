@@ -13,7 +13,6 @@ from packe._scripts.runnable import Runnable
 @dataclass(eq=False)
 class Script(Runnable):
     path: Path
-    name: str
 
     def __eq__(self, value: object) -> bool:
         return super().__eq__(value)
@@ -73,7 +72,7 @@ class Script(Runnable):
     def __str__(self) -> str:
         if self.pos is not None:
             return f"{self.pos:02d}:{self.name}"
-        return self.name
+        return self.name or "?"
 
     def run(self, executor: BashPrefixExecutor):
         cwd = self.path.parent
