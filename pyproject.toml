@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "packe"
-version = "0.7.0"
+version = "0.7.1"
 description = "Flexible bash script runner."
 authors = ["GregRos <gregros@gregros.dev>"]
 readme = "README.md"
@@ -12,7 +12,7 @@ include = [
     { path = "pyproject.toml" },
 ]
 [tool.poetry.dependencies]
-python = "3.11.*"
+python = ">=3.9,<3.15"
 pygments = "^2.19.1"
 termcolor = "^2.5.0"
 pyyaml = "^6.0.2"
